@@ -1,0 +1,39 @@
+[project]
+name = "octoscrape"
+version = "0.1.0"
+description = "Web scraping framework"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { file = "LICENSE" }
+
+dependencies = [
+    "camoufox[geoip]",
+    "pyyaml",
+]
+
+authors = [
+    { name = "Vlad Draha" }
+]
+
+keywords = ["scraping", "framework", "automation"]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+# =====================================
+# setuptools
+# =====================================
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["octoscrape*"]
+
+
+# =====================================
+# pytest
+# =====================================
+[tool.pytest.ini_options]
+pythonpath = [ "." ]
+testpaths = [ "tests" ]
+addopts = "-ra --disable-warnings"
