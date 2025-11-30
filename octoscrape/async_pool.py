@@ -1,5 +1,5 @@
 import asyncio
-
+import logging as logger
 
 class AsyncPool:
     def __init__(self, concurrency: int):
@@ -46,8 +46,14 @@ class AsyncPool:
     async def _worker(self):
         """Worker continuously pulls jobs from the queue."""
         try:
-            while True:
-                coro = await self._queue.get()
+            while not self._stopped:
+                try:
+                    coro = await asyncio.wait_for(
+                        self._queue.get(), 
+                        timeout=0.1
+                    )
+                except asyncio.TimeoutError:
+                    continue
 
                 async with self._sem:
                     task = asyncio.create_task(coro)
@@ -57,6 +63,9 @@ class AsyncPool:
                         await task
                     except asyncio.CancelledError:
                         pass
+                    except Exception:
+                        print("Worker task raised an exception")
+                        logger.error("Worker task raised an exception", exc_info=True)
                     finally:
                         self._active_tasks.discard(task)
                         self._queue.task_done()
@@ -79,9 +88,13 @@ class AsyncPool:
         # remove queued jobs
         while not self._queue.empty():
             try:
-                self._queue.get_nowait()
+                coro = self._queue.get_nowait()
                 self._queue.task_done()
+
+                coro.close()
             except asyncio.QueueEmpty:
                 break
+            except RuntimeError:
+                logger.warning(f"Exception when try to close corutine {coro}")
 
         await asyncio.sleep(0)  # let cancellations propagate
