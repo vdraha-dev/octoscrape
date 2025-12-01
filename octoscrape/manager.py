@@ -1,8 +1,8 @@
 from typing import Type
 from multiprocessing.managers import BaseManager
 
-from .IScraper import IScraper
-from .scraper_factory import ScraperFactory
+from .interfaces import IScraper
+from .factory import ScraperFactory
 
 
 class Manager(BaseManager):
