@@ -1,11 +1,25 @@
 from camoufox import AsyncCamoufox
 from browserforge.fingerprints import Screen
-from playwright.async_api import async_playwright 
+from playwright.async_api import async_playwright, Browser
 from contextlib import asynccontextmanager
 import asyncio
 
 
-class MixinAsyncCamoufox:
+class MixinContextCreator:
+    async def new_context(self, browser: Browser, new_proxy=None):
+        """
+            Async context with screen settings.
+        """
+        return await browser.new_context(
+                viewport={
+                    "width": self._common_config.MaxWindowWidth,
+                    "height": self._common_config.MaxWindowHeight,
+                },
+                proxy=new_proxy
+            )
+
+
+class MixinAsyncCamoufox(MixinContextCreator):
     @asynccontextmanager
     async def get_async_camoufox_browser(self):
         """
@@ -26,14 +40,15 @@ class MixinAsyncCamoufox:
             )
         ) as browser:
             yield browser
+            await browser.close()
 
 
 
-class MixinAsyncPlaywright:
+class MixinAsyncPlaywright(MixinContextCreator):
     @asynccontextmanager
     async def get_async_playwright_browser(self):
         """
-            Custom async context for running Playwright
+            Custom async browser for running Playwright
             with all settings (headless, screen, proxy).
         """
         async with async_playwright() as p:
@@ -48,7 +63,9 @@ class MixinAsyncPlaywright:
                     if self._config.IsProxyAvailable else None
                 )
             )
+
             yield browser
+            await browser.close()
 
 
 

@@ -1,5 +1,5 @@
 from typing import Type
-from .IScraper import IScraper
+from .interfaces import IScraper
 
 
 class ScraperFactory:

@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from multiprocessing.synchronize import Event
 from .config import CommonConfig, ScraperConfig, MultiScraperConfig
+from .mixins import MixinSync
 
-
-class IScraper(ABC):
+class IAsyncScraper(ABC):
     def __init__(self, config: ScraperConfig | MultiScraperConfig, common_config: CommonConfig):
         self._config = config
         self._common_config = common_config
@@ -26,9 +26,9 @@ class IScraper(ABC):
 
         human_name = self._config.HumanName
         if len(human_name) > 0:
-            human_name = f"| {human_name}"
+            human_name = f" | {human_name}"
 
-        return f"{key}{self._config.Name} {human_name}"
+        return f"{key}{self._config.Name}{human_name}"
     
 
     def set_stop_event(self, event: Event):
@@ -41,3 +41,6 @@ class IScraper(ABC):
 
     @abstractmethod
     async def async_stop(self):...
+
+
+class IScraper(IAsyncScraper, MixinSync):...
