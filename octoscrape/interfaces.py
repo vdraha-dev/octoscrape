@@ -7,7 +7,7 @@ class IAsyncScraper(ABC):
     def __init__(self, config: ScraperConfig | MultiScraperConfig, common_config: CommonConfig):
         self._config = config
         self._common_config = common_config
-        self.__stop_event: Event | None = None
+        self._stop_event: Event | None = None
 
 
     @property
@@ -32,7 +32,7 @@ class IAsyncScraper(ABC):
     
 
     def set_stop_event(self, event: Event):
-        self.__stop_event = event
+        self._stop_event = event
     
 
     @abstractmethod

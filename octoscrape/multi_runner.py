@@ -1,40 +1,37 @@
-from multiprocessing import Process, Semaphore
-from multiprocessing.managers import BaseManager
-from multiprocessing.synchronize import Event
-
-from .IScraper import IScraper
+from multiprocessing import Process, Event, Semaphore
+from typing import Callable, Any
 
 
 class MultiRunner:
-    def __init__(self, manager: BaseManager, pool_size):
-        self.__manager = manager
-        self.__processes = list[Process]
+    def __init__(self, factory: Callable[..., Any], pool_size: int):
+        self.__factory = factory
         self.__sem = Semaphore(pool_size)
-        self.__stop_event:Event = Event()
-    
+        self.__stop_event = Event()
+        self.__processes: list[Process] = []
 
-    def run_process(self, parser:str, *args, **kwargs):
-        worker:IScraper = self.__manager.Worker(parser, *args, **kwargs)
 
-        def wrapped_start():
-            with self.__sem:
-                worker.set_stop_event(self.__stop_event)
-                worker.start()
+    def __process_entry(self, worker_obj):
+        with self.__sem:
+            worker_obj.set_stop_event(self.__stop_event)
+            worker_obj.start()
 
-        p = Process(target=wrapped_start)
+
+    def run_process(self, label: str, *args, **kwargs):
+        if self.__stop_event.is_set():
+            raise RuntimeError("Cannot run new process: MultiRunner is already stopped.")
+        worker = self.__factory(label, *args, **kwargs)
+
+        p = Process(target=self.__process_entry, args=(worker,))
         p.start()
         self.__processes.append(p)
 
 
-    def run_processes(self, arg_list):
-        for a in arg_list:
-            self.run_process(a)
-
-
-    def stop(self):
+    def stop_all(self):
         self.__stop_event.set()
-
-
-    def join(self):
         for p in self.__processes:
             p.join()
+
+    
+    @property
+    def is_stopped(self) -> bool:
+        return self.__stop_event.is_set()
