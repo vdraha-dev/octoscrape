@@ -5,11 +5,11 @@
 This document describes the structure and purpose of the configuration file used by the scraping framework.
 The configuration is divided into two main sections:
 
-- shared — Global application settings
+- common — Global application settings
 - process — Per-worker (per-scraper) settings
 - process — Per-worker (multi scraper) settings
 
-### Shared Settings
+### Common Settings
 
 Global settings that affect the entire application.
 
@@ -22,7 +22,7 @@ Global settings that affect the entire application.
 
 #### Example:
 ```yaml
-shared:
+common:
   path_to_csv: ./results
   max_width: 1920
   max_height: 1080
