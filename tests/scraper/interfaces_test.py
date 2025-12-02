@@ -10,7 +10,7 @@ def test_async_init(async_scraper, scraper_config, common_config):
     assert async_scraper._config is scraper_config
     assert async_scraper._common_config == common_config
     assert async_scraper._common_config is common_config
-    assert async_scraper._IAsyncScraper__stop_event is None
+    assert async_scraper._stop_event is None
 
 
 def test_async_full_name(async_scraper, scraper_config_dict):
@@ -63,10 +63,10 @@ def test_async_full_name_without_key_and_human_name(
         common_config):
     scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict), common_config)
 
-    assert scraper._IAsyncScraper__stop_event is None
+    assert scraper._stop_event is None
     event = object()
     scraper.set_stop_event(event)
-    assert scraper._IAsyncScraper__stop_event is event
+    assert scraper._stop_event is event
 
     
 ############
@@ -78,7 +78,7 @@ def test_init(sync_scraper, scraper_config, common_config):
     assert sync_scraper._config is scraper_config
     assert sync_scraper._common_config == common_config
     assert sync_scraper._common_config is common_config
-    assert sync_scraper._IAsyncScraper__stop_event is None
+    assert sync_scraper._stop_event is None
 
 
 def test_full_name(sync_scraper, scraper_config_dict):
