@@ -6,38 +6,8 @@ common:
 
 
 process:
-  SomeWebsiteScraperExample:
-    human_name: Some website
-    name: some_website
-    url: https://some_website.com
-    # label: some_website_emplemantation_label
-    # headless: true
-    # pool_size: 10
-    # proxy:
-    #   server: "http://proxy:8080"
-    #   username: "user"
-    #   password: "pass"
-
-  MultiScraperExample:
-    is_multiscraper: true
-    label: multi_scraper_label
-    human_name: Some multiscraper
-    name: some_multiscraper
-    pool_size: 2
-    scrapers:
-      SomeExample1:
-        human_name: Some website
-        name: some_website
-        url: https://some_website.com/some_path/
-
-      SomeExample2:
-        human_name: Some website 2
-        name: some_website_2
-        url: https://pakcoat.org/other_path/
-        label: some_website
-
-      SomeExample3:
-        human_name: Another website
-        name: another_website_with_price_information
-        url: https://another_website.com
-        label: another_website
+  Q2S:
+    human_name: Quotes to Scrape
+    name: q2s
+    url: https://quotes.toscrape.com
+    pool_size: 5

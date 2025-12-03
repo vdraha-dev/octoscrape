@@ -9,6 +9,8 @@ license = { file = "LICENSE" }
 dependencies = [
     "camoufox[geoip]",
     "pyyaml",
+    "httpx",
+    "beautifulsoup4"
 ]
 
 authors = [
