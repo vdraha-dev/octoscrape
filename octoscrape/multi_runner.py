@@ -1,4 +1,4 @@
-from multiprocessing import Process, Event, Semaphore
+from multiprocessing import Process, Event, Semaphore, Lock
 from typing import Callable, Any
 
 
@@ -8,6 +8,7 @@ class MultiRunner:
         self.__sem = Semaphore(pool_size)
         self.__stop_event = Event()
         self.__processes: list[Process] = []
+        self.__lock = Lock()
 
 
     def __process_entry(self, worker_obj):
@@ -17,13 +18,14 @@ class MultiRunner:
 
 
     def run_process(self, label: str, *args, **kwargs):
-        if self.__stop_event.is_set():
-            raise RuntimeError("Cannot run new process: MultiRunner is already stopped.")
-        worker = self.__factory(label, *args, **kwargs)
+        with self.__lock:
+            if self.__stop_event.is_set():
+                raise RuntimeError("Cannot run new process: MultiRunner is already stopped.")
+            worker = self.__factory(label, *args, **kwargs)
 
-        p = Process(target=self.__process_entry, args=(worker,))
-        p.start()
-        self.__processes.append(p)
+            p = Process(target=self.__process_entry, args=(worker,))
+            p.start()
+            self.__processes.append(p)
 
 
     def stop_all(self):

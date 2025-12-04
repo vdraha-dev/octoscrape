@@ -1,10 +1,12 @@
 import asyncio
 import logging as logger
+from typing import Coroutine
 
 class AsyncPool:
     def __init__(self, concurrency: int):
-        self._sem = asyncio.Semaphore(concurrency)
-        self._queue = asyncio.Queue()
+        self.__concurency = concurrency
+        self._sem = asyncio.Semaphore(self.__concurency)
+        self._queue: asyncio.Queue[Coroutine] = asyncio.Queue()
 
         self._workers: list[asyncio.Task] = []
         self._active_tasks: set[asyncio.Task] = set()
@@ -14,7 +16,7 @@ class AsyncPool:
 
     async def start(self):
         """Launch workers (based on concurrency)."""
-        for _ in range(self._sem._value):  # concurrency == initial semaphore value
+        for _ in range(self.__concurency):  # concurrency == initial semaphore value
             worker = asyncio.create_task(self._worker())
             self._workers.append(worker)
 
@@ -35,7 +37,7 @@ class AsyncPool:
         await asyncio.gather(*self._workers, return_exceptions=True)
 
 
-    async def submit(self, coro):
+    async def submit(self, coro:Coroutine):
         """Submit a coroutine to execution. If stopped — ignore or raise."""
         if self._stopped:
             raise RuntimeError("Pool stopped: cannot submit new jobs.")
@@ -94,7 +96,7 @@ class AsyncPool:
                 coro.close()
             except asyncio.QueueEmpty:
                 break
-            except RuntimeError:
-                logger.warning(f"Exception when try to close corutine {coro}")
+            except (RuntimeError, GeneratorExit) as e:
+                logger.warning(f"Expected exception when closing coroutine: {e}")
 
         await asyncio.sleep(0)  # let cancellations propagate
