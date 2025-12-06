@@ -2,8 +2,7 @@ import pytest
 import copy
 from octoscrape.config import (
     CommonConfig,
-    ScraperConfig,
-    MultiScraperConfig
+    ScraperConfig
 )
 
 ###################################
@@ -21,7 +20,8 @@ def common_config_dict() -> dict:
         "path_to_csv":  "some/path/to/csv",
         "max_width":    11111111,
         "max_height":   22222222,
-        "pool_size":    33333333
+        "pool_size":    33333333,
+        "headless":     True
     }
 
 
@@ -61,7 +61,6 @@ def scraper_dict() -> dict:
         "name":         "working_name",
         "url":          "start_page",
         "label":        "label",
-        "headless":     True,
         "pool_size":    1111111,
         "proxy": {
             "server":   "http://example.com:8080",
@@ -81,64 +80,3 @@ def scraper_config_proxy_str() -> ScraperConfig:
     return ScraperConfig({
         "proxy":'{"server": "http://example.com:8080", "username": "user", "password": "pass"}'
     })
-
-
-
-#########################################
-# Fixtures for MultiScraperConfig tests #
-#########################################
-
-@pytest.fixture(scope="session")
-def default_multi_scraper_config() -> MultiScraperConfig:
-    return MultiScraperConfig({
-        "scrapers":{
-            "sc1":{},
-            "sc2":{}
-        }
-    })
-
-
-@pytest.fixture(scope="session")
-def multi_scraper_dict():
-    return {
-        "name":         "multiscraper",
-        "human_name":   "multiscraper_human_like",
-        "label":        "multilabel",
-        "pool_size":    22222222,
-        "scrapers": {
-            "scr1": {
-                "human_name":   "Like a human 1",
-                "name":         "name1",
-                "url":          "url1"
-            },
-            "scr2": {
-                "human_name":   "Like a human 2",
-                "name":         "name2",
-                "url":          "url2"
-            },
-            "scr3": {
-                "human_name":   "Like a human 3",
-                "name":         "name3",
-                "url":          "url3"
-            }
-        }
-    }
-
-
-@pytest.fixture(scope="function")
-def additional_scraper():
-    return {
-        "human_name":   "Like a human 4",
-        "name":         "name4",
-        "url":          "url4"
-    }
-
-
-@pytest.fixture(scope="session")
-def multi_scraper_config(multi_scraper_dict) -> MultiScraperConfig:
-    return MultiScraperConfig(multi_scraper_dict)
-
-
-@pytest.fixture(scope="function")
-def fresh_multi_scraper_config(multi_scraper_dict) -> MultiScraperConfig:
-    return MultiScraperConfig(copy.deepcopy(multi_scraper_dict))

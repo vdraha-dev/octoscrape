@@ -1,9 +1,8 @@
 import pytest
 import asyncio
 import copy
-from octoscrape.config import ScraperConfig, CommonConfig
+from octoscrape.config import ScraperConfig
 from octoscrape.scraper.interfaces import IAsyncScraper, IScraper
-from octoscrape.scraper.mixins import MixinAsyncCamoufox, MixinAsyncPlaywright
 from octoscrape.scraper.factory import ScraperFactory
 
 
@@ -25,16 +24,6 @@ class SyncScraper(IScraper):
 
     async def async_stop(self):
         await asyncio.sleep(.01)
-
-
-@pytest.fixture(scope="session")
-def common_config_dict():
-    return {
-        "path_to_csv": "my/path",
-        "max_width": 3840,
-        "max_height": 2160,
-        "pool_size": 45,
-    }
 
 
 @pytest.fixture(scope="session")
@@ -67,42 +56,19 @@ def create_fresh_scraper_config():
 
 
 @pytest.fixture(scope="session")
-def common_config(common_config_dict):
-    return CommonConfig(common_config_dict)
-
-
-@pytest.fixture(scope="session")
 def scraper_config(scraper_config_dict):
     return ScraperConfig(scraper_config_dict, "Key")
 
 
 @pytest.fixture(scope="session")
-def async_scraper(scraper_config, common_config):
-    return AsyncScraper(scraper_config, common_config)
+def async_scraper(scraper_config):
+    return AsyncScraper(scraper_config)
 
 
 @pytest.fixture(scope="session")
-def sync_scraper(scraper_config, common_config):
-    return SyncScraper(scraper_config, common_config)
+def sync_scraper(scraper_config):
+    return SyncScraper(scraper_config)
 
-
-#######################
-# Fixctures for Mixin #
-#######################
-
-class MixinPlaywright(AsyncScraper,MixinAsyncPlaywright):...
-
-class MixinCamoufox(AsyncScraper,MixinAsyncCamoufox):...
-
-
-@pytest.fixture(scope="session")
-def mixin_playwright(scraper_config, common_config):
-    return MixinPlaywright(scraper_config, common_config)
-
-
-@pytest.fixture(scope="session")
-def mixin_camoufox(scraper_config, common_config):
-    return MixinCamoufox(scraper_config, common_config)
 
 
 ########################

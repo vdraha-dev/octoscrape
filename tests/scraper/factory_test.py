@@ -5,14 +5,14 @@ def test_factory_item_not_exist(factory):
         factory("not_exist_label")
 
 
-def test_create_new_scraper(factory, scraper_config, common_config):
-    factory("label1", scraper_config, common_config)
+def test_create_new_scraper(factory, scraper_config):
+    factory("label1", scraper_config)
 
 
-def test_is_not_the_same(factory, scraper_config, common_config, factory_dict):
-    scr1 = factory("label1", scraper_config, common_config)
-    scr2 = factory("label2", scraper_config, common_config)
-    scr3 = factory("label3", scraper_config, common_config)
+def test_is_not_the_same(factory, scraper_config, factory_dict):
+    scr1 = factory("label1", scraper_config)
+    scr2 = factory("label2", scraper_config)
+    scr3 = factory("label3", scraper_config)
 
     assert type(scr1) is factory_dict["label1"]
     assert not type(scr1) is factory_dict["label2"]

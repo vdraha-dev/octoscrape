@@ -18,7 +18,6 @@ class MixinContextCreator:
         return context
 
 
-
 class MixinSync:
     def start(self):
         try:

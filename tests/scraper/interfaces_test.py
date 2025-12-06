@@ -5,11 +5,9 @@ import pytest
 # AsyncTest #
 #############
 
-def test_async_init(async_scraper, scraper_config, common_config):
+def test_async_init(async_scraper, scraper_config):
     assert async_scraper._config == scraper_config
     assert async_scraper._config is scraper_config
-    assert async_scraper._common_config == common_config
-    assert async_scraper._common_config is common_config
     assert async_scraper._stop_event is None
 
 
@@ -20,29 +18,26 @@ def test_async_full_name(async_scraper, scraper_config_dict):
 def test_async_full_name_without_key(
         create_fresh_scraper_config,
         create_fresh_async_scraper, 
-        fresh_scraper_config_dict, 
-        common_config):
-    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict), common_config)
+        fresh_scraper_config_dict):
+    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict))
     assert scraper.FullName == f"{fresh_scraper_config_dict['name']} | {fresh_scraper_config_dict['human_name']}"
 
 
 def test_async_full_name_without_human_name(
         create_fresh_scraper_config,
         create_fresh_async_scraper, 
-        fresh_scraper_config_dict, 
-        common_config):
+        fresh_scraper_config_dict):
     del fresh_scraper_config_dict["human_name"]
-    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict, "Key"), common_config)
+    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict, "Key"))
     assert scraper.FullName == f"Key.{fresh_scraper_config_dict['name']}"
 
 
 def test_async_full_name_without_key_and_human_name(
         create_fresh_scraper_config,
         create_fresh_async_scraper, 
-        fresh_scraper_config_dict, 
-        common_config):
+        fresh_scraper_config_dict):
     del fresh_scraper_config_dict["human_name"]
-    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict), common_config)
+    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict))
     assert scraper.FullName == f"{fresh_scraper_config_dict['name']}"
 
 
@@ -59,9 +54,8 @@ async def test_async_stop(async_scraper):
 def test_async_full_name_without_key_and_human_name(
         create_fresh_scraper_config,
         create_fresh_async_scraper, 
-        fresh_scraper_config_dict, 
-        common_config):
-    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict), common_config)
+        fresh_scraper_config_dict):
+    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict))
 
     assert scraper._stop_event is None
     event = object()
@@ -73,11 +67,9 @@ def test_async_full_name_without_key_and_human_name(
 # SyncTest #
 ############
 
-def test_init(sync_scraper, scraper_config, common_config):
+def test_init(sync_scraper, scraper_config):
     assert sync_scraper._config == scraper_config
     assert sync_scraper._config is scraper_config
-    assert sync_scraper._common_config == common_config
-    assert sync_scraper._common_config is common_config
     assert sync_scraper._stop_event is None
 
 

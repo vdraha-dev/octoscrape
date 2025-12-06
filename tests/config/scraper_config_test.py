@@ -57,10 +57,6 @@ def test_default_label(default_scraper_config):
         default_scraper_config.Scraper
 
 
-def test_default_headless(default_scraper_config):
-    assert default_scraper_config.Headless == False
-
-
 def test_default_pool_size(default_scraper_config):
     assert default_scraper_config.PoolSize == 1
 
@@ -109,10 +105,6 @@ def test_url(scraper_config, scraper_dict):
 
 def test_scraper(scraper_config, scraper_dict):
     assert scraper_config.Scraper == scraper_dict["label"]
-
-
-def test_headless(scraper_config, scraper_dict):
-    assert scraper_config.Headless == scraper_dict["headless"]
 
 
 def test_pool_size(scraper_config, scraper_dict):
