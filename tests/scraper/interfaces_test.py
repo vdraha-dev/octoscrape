@@ -12,7 +12,7 @@ def test_async_init(async_scraper, scraper_config):
 
 
 def test_async_full_name(async_scraper, scraper_config_dict):
-    assert async_scraper.FullName == f"Key.{scraper_config_dict['name']} | {scraper_config_dict['human_name']}"
+    assert async_scraper.FullName == f"ScraperKey.{scraper_config_dict['name']} | {scraper_config_dict['human_name']}"
 
 
 def test_async_full_name_without_key(
@@ -28,8 +28,8 @@ def test_async_full_name_without_human_name(
         create_fresh_async_scraper, 
         fresh_scraper_config_dict):
     del fresh_scraper_config_dict["human_name"]
-    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict, "Key"))
-    assert scraper.FullName == f"Key.{fresh_scraper_config_dict['name']}"
+    scraper = create_fresh_async_scraper(create_fresh_scraper_config(fresh_scraper_config_dict, "ScraperKey"))
+    assert scraper.FullName == f"ScraperKey.{fresh_scraper_config_dict['name']}"
 
 
 def test_async_full_name_without_key_and_human_name(
@@ -74,7 +74,7 @@ def test_init(sync_scraper, scraper_config):
 
 
 def test_full_name(sync_scraper, scraper_config_dict):
-    assert sync_scraper.FullName == f"Key.{scraper_config_dict['name']} | {scraper_config_dict['human_name']}"
+    assert sync_scraper.FullName == f"ScraperKey.{scraper_config_dict['name']} | {scraper_config_dict['human_name']}"
 
 
 def test_start(sync_scraper, mocker):

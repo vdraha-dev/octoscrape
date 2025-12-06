@@ -26,19 +26,19 @@ class SyncScraper(IScraper):
         await asyncio.sleep(.01)
 
 
-@pytest.fixture(scope="session")
-def scraper_config_dict():
-    return {
-        "human_name": "like a human",
-        "name": "qwerty",
-        "url": "urllll",
-        "headless": True
-    }
+# @pytest.fixture(scope="session")
+# def scraper_config_dict():
+#     return {
+#         "human_name": "like a human",
+#         "name": "qwerty",
+#         "url": "urllll",
+#         "headless": True
+#     }
 
 
-@pytest.fixture(scope="function")
-def fresh_scraper_config_dict(scraper_config_dict):
-    return copy.deepcopy(scraper_config_dict)
+# @pytest.fixture(scope="function")
+# def fresh_scraper_config_dict(scraper_config_dict):
+#     return copy.deepcopy(scraper_config_dict)
 
 
 @pytest.fixture(scope="function")
@@ -55,9 +55,9 @@ def create_fresh_scraper_config():
     return inner
 
 
-@pytest.fixture(scope="session")
-def scraper_config(scraper_config_dict):
-    return ScraperConfig(scraper_config_dict, "Key")
+# @pytest.fixture(scope="session")
+# def scraper_config(scraper_config_dict):
+#     return ScraperConfig(scraper_config_dict, "Key")
 
 
 @pytest.fixture(scope="session")

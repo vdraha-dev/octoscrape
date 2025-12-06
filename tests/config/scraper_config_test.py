@@ -87,41 +87,41 @@ def test_required_scraper(
         assert only_required_fields_scraper_config.Scraper == only_required_fields_scraper_dict["name"]
 
 
-def test_human_name(scraper_config, scraper_dict):
-    assert scraper_config.HumanName == scraper_dict["human_name"]
+def test_human_name(scraper_config, scraper_config_dict):
+    assert scraper_config.HumanName == scraper_config_dict["human_name"]
 
 
 def test_human_key(scraper_config):
     assert scraper_config.Key == "ScraperKey"
 
 
-def test_name(scraper_config, scraper_dict):
-    assert scraper_config.Name == scraper_dict["name"]
+def test_name(scraper_config, scraper_config_dict):
+    assert scraper_config.Name == scraper_config_dict["name"]
 
 
-def test_url(scraper_config, scraper_dict):
-    assert scraper_config.Url == scraper_dict["url"]
+def test_url(scraper_config, scraper_config_dict):
+    assert scraper_config.Url == scraper_config_dict["url"]
 
 
-def test_scraper(scraper_config, scraper_dict):
-    assert scraper_config.Scraper == scraper_dict["label"]
+def test_scraper(scraper_config, scraper_config_dict):
+    assert scraper_config.Scraper == scraper_config_dict["label"]
 
 
-def test_pool_size(scraper_config, scraper_dict):
-    assert scraper_config.PoolSize == scraper_dict["pool_size"]
+def test_pool_size(scraper_config, scraper_config_dict):
+    assert scraper_config.PoolSize == scraper_config_dict["pool_size"]
 
 
 def test_is_proxy_availible(scraper_config):
     assert scraper_config.IsProxyAvailable == True
 
 
-def test_proxy(scraper_config, scraper_dict):
-    assert scraper_config.Proxy == scraper_dict["proxy"]
+def test_proxy(scraper_config, scraper_config_dict):
+    assert scraper_config.Proxy == scraper_config_dict["proxy"]
 
 
 def test_is_proxy_availible_str(scraper_config_proxy_str):
     assert scraper_config_proxy_str.IsProxyAvailable == True
 
 
-def test_proxy_str(scraper_config_proxy_str, scraper_dict):
-    assert scraper_config_proxy_str.Proxy == scraper_dict["proxy"]
+def test_proxy_str(scraper_config_proxy_str, scraper_config_dict):
+    assert scraper_config_proxy_str.Proxy == scraper_config_dict["proxy"]
