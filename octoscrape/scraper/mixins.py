@@ -1,21 +1,22 @@
 import asyncio
-from playwright.async_api import Browser
-from ..config import common_config
+from playwright.async_api import Browser, BrowserContext
+from ..config import common_config, CommonConfig
 
 
 class MixinContextCreator:
-    async def _new_context(self, browser:Browser):
+    async def _new_context(self, browser:Browser, *, config: CommonConfig | None = None) -> BrowserContext:
         """
             Create async bowser context.
         """
-        context = await browser.new_context(
+        if config is None:
+            config = common_config
+        return await browser.new_context(
                 viewport={
-                    "width": common_config.MaxWindowWidth,
-                    "height": common_config.MaxWindowHeight,
+                    "width": config.MaxWindowWidth,
+                    "height": config.MaxWindowHeight,
                 },
                 proxy= self._config.Proxy if self._config.IsProxyAvailable else None
             )
-        return context
 
 
 class MixinSync:

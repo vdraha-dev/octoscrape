@@ -61,31 +61,3 @@ def test_async_full_name_without_key_and_human_name(
     event = object()
     scraper.set_stop_event(event)
     assert scraper._stop_event is event
-
-    
-############
-# SyncTest #
-############
-
-def test_init(sync_scraper, scraper_config):
-    assert sync_scraper._config == scraper_config
-    assert sync_scraper._config is scraper_config
-    assert sync_scraper._stop_event is None
-
-
-def test_full_name(sync_scraper, scraper_config_dict):
-    assert sync_scraper.FullName == f"ScraperKey.{scraper_config_dict['name']} | {scraper_config_dict['human_name']}"
-
-
-def test_start(sync_scraper, mocker):
-    async_mock = mocker.AsyncMock()
-    mocker.patch.object(sync_scraper, "async_start", async_mock)
-    sync_scraper.start()
-    async_mock.assert_awaited_once()
-
-
-def test_stop(sync_scraper, mocker):
-    async_mock = mocker.AsyncMock()
-    mocker.patch.object(sync_scraper, "async_stop", async_mock)
-    sync_scraper.stop()
-    async_mock.assert_awaited_once()

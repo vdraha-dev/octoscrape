@@ -18,8 +18,8 @@ def default_common_config() -> CommonConfig:
 def common_config_dict() -> dict:
     return {
         "path_to_csv":  "some/path/to/csv",
-        "max_width":    11111111,
-        "max_height":   22222222,
+        "max_width":    3840,
+        "max_height":   2160,
         "pool_size":    33333333,
         "headless":     True
     }
