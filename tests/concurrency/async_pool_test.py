@@ -1,6 +1,6 @@
 import asyncio
 import pytest
-from octoscrape.async_pool import AsyncPool
+from octoscrape.concurrency import AsyncPool
 
 
 @pytest.mark.asyncio

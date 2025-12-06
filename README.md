@@ -6,8 +6,7 @@ This document describes the structure and purpose of the configuration file used
 The configuration is divided into two main sections:
 
 - common — Global application settings
-- process — Per-worker (per-scraper) settings
-- process — Per-worker (multi scraper) settings
+- scrapers — Per-worker (per-scraper) settings
 
 ### Common Settings
 
@@ -19,6 +18,7 @@ Global settings that affect the entire application.
 | **max_width**   | int    | Maximum browser window width.                                                         | 1920                      |
 | **max_height**  | int    | Maximum browser window height.                                                        | 1080                      |
 | **pool_size**   | int    | Number of multiprocessing workers that can run simultaneously.                        | 1                         |
+| **headless**    | bool   | optional | Run the browser in headless mode.                                          | false                     |
 
 #### Example:
 ```yaml
@@ -27,12 +27,13 @@ common:
   max_width: 1920
   max_height: 1080
   pool_size: 2
+  headless: true
 ```
 
-## Process Settings
+## Scraper Settings
 
 Each entry under process: defines an independent logical scraping worker.
-Every worker has its own browser settings, target URL, scraper implementation, and concurrency limits.
+Every worker has its own target URL, scraper implementation, and concurrency limits.
 
 ### Common Fields
 | Field          | Type   | Required | Description                                                                  | Default                      |
@@ -41,7 +42,7 @@ Every worker has its own browser settings, target URL, scraper implementation, a
 | **name**       | string | yes      | Internal worker name. Also used as the prefix for output filenames.          |                              |
 | **url**        | string | yes      | Base URL of the page that the worker will process.                           |                              |
 | **label**      | string | optional | Identifier used by the scraper factory to select the scraper implementation. | `process.<thread_name>.name` |
-| **headless**   | bool   | optional | Run the browser in headless mode.                                            | false                        |
+<!-- | **headless**   | bool   | optional | Run the browser in headless mode.                                            | false                        | -->
 | **pool_size**  | int    | optional | Number of concurrent asynchronous tasks allowed within this worker.          | 1                            |
 | **proxy**      | object | optional | Per-worker proxy settings (server, username, password).                      | None                         |
 
@@ -53,15 +54,14 @@ proxy:
   password: "pass"
 ```
 
-#### Example: Single Scraper Process
+#### Example: Scraper settings
 ```yaml
-process:
+scrapers:
   SomeWebsiteScraperExample:
     human_name: Some website
     name: some_website
     url: https://some_website.com
     # label: some_website_emplemantation_label
-    # headless: true
     # pool_size: 10
     # proxy:
     #   server: "http://proxy:8080"
@@ -69,7 +69,7 @@ process:
     #   password: "pass"
 ```
 
-## Multi-Scraper Process
+<!-- ## Multi-Scraper Process
 
 The process can contain multiple scraper implementations. 
 This is used when a single worker needs to run multiple scrapers in parallel, each with its own settings.
@@ -108,7 +108,7 @@ process:
         name: another_website_with_price_information
         url: https://another_website.com
         label: another_website
-```
+``` -->
 
 
 <!-- # How run

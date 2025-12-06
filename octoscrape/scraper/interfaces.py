@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 from multiprocessing.synchronize import Event
-from .config import CommonConfig, ScraperConfig, MultiScraperConfig
+from ..config import ScraperConfig
 from .mixins import MixinSync
 
+
 class IAsyncScraper(ABC):
-    def __init__(self, config: ScraperConfig | MultiScraperConfig, common_config: CommonConfig):
-        self._config = config
-        self._common_config = common_config
+    def __init__(self, config: ScraperConfig):
+        self._config: ScraperConfig = config
         self._stop_event: Event | None = None
 
 

@@ -1,8 +1,7 @@
 import pytest 
 import asyncio
-from octoscrape.interfaces import IScraper
-from octoscrape.multi_runner import MultiRunner
-from octoscrape.factory import ScraperFactory
+from octoscrape.scraper.interfaces import IScraper
+from octoscrape.scraper.factory import ScraperFactory
 from octoscrape.config import ScraperConfig, CommonConfig
 
 class MockScraper(IScraper):

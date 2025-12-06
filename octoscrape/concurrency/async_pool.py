@@ -2,6 +2,7 @@ import asyncio
 import logging as logger
 from typing import Coroutine
 
+
 class AsyncPool:
     def __init__(self, concurrency: int):
         self.__concurency = concurrency
@@ -25,9 +26,7 @@ class AsyncPool:
         """Stop gracefully: no new tasks, cancel active ones."""
         self._stopped = True
 
-        # cancel active tasks
-        for task in self._active_tasks:
-            task.cancel()
+        await self.cancel_all()
 
         # cancel worker tasks
         for w in self._workers:
@@ -41,7 +40,6 @@ class AsyncPool:
         """Submit a coroutine to execution. If stopped — ignore or raise."""
         if self._stopped:
             raise RuntimeError("Pool stopped: cannot submit new jobs.")
-
         await self._queue.put(coro)
 
 
@@ -92,7 +90,6 @@ class AsyncPool:
             try:
                 coro = self._queue.get_nowait()
                 self._queue.task_done()
-
                 coro.close()
             except asyncio.QueueEmpty:
                 break

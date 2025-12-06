@@ -2,9 +2,9 @@ import pytest
 import asyncio
 import copy
 from octoscrape.config import ScraperConfig, CommonConfig
-from octoscrape.interfaces import IAsyncScraper, IScraper
-from octoscrape.mixins import MixinAsyncCamoufox, MixinAsyncPlaywright
-from octoscrape.factory import ScraperFactory
+from octoscrape.scraper.interfaces import IAsyncScraper, IScraper
+from octoscrape.scraper.mixins import MixinAsyncCamoufox, MixinAsyncPlaywright
+from octoscrape.scraper.factory import ScraperFactory
 
 
 ############################
