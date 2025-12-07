@@ -32,9 +32,11 @@ class PlaywrightBrowserManager(IBrowserManager):
                 ],
             )
             self.__initialized = True
-            yield
-            self.__browser = None
-            self.__initialized = False
+            try:
+                yield
+            finally:
+                self.__browser = None
+                self.__initialized = False
 
 
     def get_browser(self) -> Browser:
