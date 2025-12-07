@@ -3,17 +3,12 @@ common:
   max_width: 1920
   max_height: 1080
   pool_size: 2
-  headless: false
+  headless: true
 
 
 scrapers:
-  SomeWebsiteScraperExample:
-    human_name: Some website
-    name: some_website
-    url: https://some_website.com
-    # label: some_website_emplemantation_label
-    # pool_size: 10
-    # proxy:
-    #   server: "http://proxy:8080"
-    #   username: "user"
-    #   password: "pass"
+  Q2S:
+    human_name: Quotes to Scrape
+    name: q2s
+    url: https://quotes.toscrape.com
+    pool_size: 5
