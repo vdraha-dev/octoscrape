@@ -4,7 +4,6 @@ from octoscrape.config import ScraperConfig
 from octoscrape.scraper.interfaces import IAsyncScraper
 from octoscrape.scraper.factory import ScraperFactory
 from octoscrape.scraper.mixins import MixinContextCreator, MixinSync
-from octoscrape.browser_manager import playwright_manager, camoufox_manager
 
 ############################
 # Fixctures for Interfaces #
@@ -67,9 +66,6 @@ def context_creator_scraper(scraper_config):
     return AsyncScraperWithContextCreator(scraper_config)
 
 
-@pytest.fixture(params=[camoufox_manager, playwright_manager])
-def browser_manager(request):
-    return request.param
 
 
 ########################

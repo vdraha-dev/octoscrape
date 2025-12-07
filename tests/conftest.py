@@ -4,6 +4,11 @@ from octoscrape.config import (
     CommonConfig,
     ScraperConfig
 )
+from octoscrape.browser_manager import (
+    playwright_manager, 
+    camoufox_manager
+)
+
 
 ###################################
 # Fixtures for CommonConfig tests #
@@ -85,3 +90,14 @@ def scraper_config_proxy_str() -> ScraperConfig:
     return ScraperConfig({
         "proxy":'{"server": "http://example.com:8080", "username": "user", "password": "pass"}'
     })
+
+
+
+############################
+# Browser manager Fixtures #
+############################
+
+
+@pytest.fixture(params=[camoufox_manager, playwright_manager])
+def browser_manager(request):
+    return request.param
