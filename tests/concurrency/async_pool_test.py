@@ -258,5 +258,111 @@ async def test_zero_concurrency():
     # The task should not be completed.
     assert len(executed) == 0
     
-    await pool.cancel_all()
     await pool.stop()
+
+
+@pytest.mark.asyncio
+async def test_lifecycle():
+    def get_state(p:AsyncPool):
+        return (
+            p._queue.qsize()
+            ,len(p._workers)
+            ,len(p._active_tasks)
+            ,p.is_stopped
+        )
+
+    pool = AsyncPool(concurrency=2)
+    
+    # state before start
+    assert (0, 0, 0, True) == get_state(pool)
+
+    await pool.start()
+    results = []
+
+    # state after start
+    assert (0, 2, 0, False) == get_state(pool)
+    
+    async def task(value):
+        await asyncio.sleep(0.02)
+        results.append(value)
+    
+    await pool.submit(task(1))
+    await pool.submit(task(2))
+    await pool.submit(task(3))
+
+    # state after adding tasks
+    assert (3, 2, 0, False) == get_state(pool)
+
+    await asyncio.sleep(0.01)
+
+    # state after start of tasks execution 
+    assert (1, 2, 2, False) == get_state(pool)
+    
+    await pool.drain()
+
+    # state after completing all tasks 
+    assert (0, 2, 0, False) == get_state(pool)
+
+    await pool.stop()
+
+    # state after stop
+    assert (0, 0, 0, True) == get_state(pool)
+    
+    assert sorted(results) == [1, 2, 3]
+
+
+@pytest.mark.asyncio
+async def test_context_exception_handling():
+    async with AsyncPool(concurrency=2) as pool:    
+        results = []
+        
+        async def failing_task():
+            await asyncio.sleep(0.01)
+            raise ValueError("Test error")
+        
+        async def normal_task(value):
+            await asyncio.sleep(0.01)
+            results.append(value)
+        
+        await pool.submit(failing_task())
+        await pool.submit(normal_task(1))
+        await pool.submit(normal_task(2))
+        
+    assert sorted(results) == [1, 2]
+
+
+@pytest.mark.asyncio
+async def test_context_lifecycle():
+    def get_state(p:AsyncPool):
+        return (
+            p._queue.qsize()
+            ,len(p._workers)
+            ,len(p._active_tasks)
+            ,p.is_stopped 
+        )
+    
+    async with AsyncPool(concurrency=2) as pool:
+        results = []
+
+        # state after start
+        assert (0, 2, 0, False) == get_state(pool)
+        
+        async def task(value):
+            await asyncio.sleep(0.02)
+            results.append(value)
+        
+        await pool.submit(task(1))
+        await pool.submit(task(2))
+        await pool.submit(task(3))
+
+        # state after adding tasks
+        assert (3, 2, 0, False) == get_state(pool)
+
+        await asyncio.sleep(0.01)
+
+        # state after start of tasks execution 
+        assert (1, 2, 2, False) == get_state(pool)
+        
+    # state after stop
+    assert (0, 0, 0, True) == get_state(pool)   
+    assert sorted(results) == [1, 2, 3]
