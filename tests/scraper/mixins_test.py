@@ -8,7 +8,7 @@ import pytest
 @pytest.mark.asyncio
 async def test_create_context(browser_manager, context_creator_scraper):
     async with browser_manager.create_browser():
-        browser = browser_manager.get_browser()
+        browser = browser_manager.browser
         context1 = await context_creator_scraper._new_context(browser)
         context2 = await context_creator_scraper._new_context(browser)
 
@@ -20,7 +20,7 @@ async def test_create_context(browser_manager, context_creator_scraper):
 @pytest.mark.asyncio
 async def test_config_read(browser_manager, context_creator_scraper, common_config):
     async with browser_manager.create_browser(common_config):
-        browser = browser_manager.get_browser()
+        browser = browser_manager.browser
         context = await context_creator_scraper._new_context(browser, config=common_config)
         page = await context.new_page()
         size = page.viewport_size

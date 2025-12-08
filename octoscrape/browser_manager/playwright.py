@@ -39,7 +39,13 @@ class PlaywrightBrowserManager(IBrowserManager):
                 self.__initialized = False
 
 
-    def get_browser(self) -> Browser:
+    @property
+    def browser(self) -> Browser:
         if not self.__initialized:
             raise RuntimeError("Playwriht browser has not been created yet.")
         return self.__browser
+    
+
+    @property
+    def initialized(self) -> bool:
+        return self.__initialized
