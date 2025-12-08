@@ -1,3 +1,4 @@
+from __future__ import annotations
 import asyncio
 import logging as logger
 from typing import Coroutine
@@ -12,11 +13,27 @@ class AsyncPool:
         self._workers: list[asyncio.Task] = []
         self._active_tasks: set[asyncio.Task] = set()
 
-        self._stopped = False
+        self._stopped = True
+
+    @property
+    def is_stopped(self):
+        return self._stopped
+
+
+    async def __aenter__(self) -> AsyncPool:
+        await self.start()
+        return self
+
+
+    async def __aexit__(self, exc_type, exc, tb):
+        await self.drain()
+        await self.stop()
+        return False
 
 
     async def start(self):
         """Launch workers (based on concurrency)."""
+        self._stopped = False
         for _ in range(self.__concurency):  # concurrency == initial semaphore value
             worker = asyncio.create_task(self._worker())
             self._workers.append(worker)
@@ -34,6 +51,7 @@ class AsyncPool:
 
         # wait workers termination
         await asyncio.gather(*self._workers, return_exceptions=True)
+        self._workers.clear()
 
 
     async def submit(self, coro:Coroutine):
