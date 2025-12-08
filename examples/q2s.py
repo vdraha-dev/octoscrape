@@ -21,7 +21,7 @@ class Q2S(IAsyncScraper):
 
 
     async def async_start(self):
-        asyncio.create_task(self.__pool.start())
+        await self.__pool.start()
         async with AsyncClient() as client:
             await self.__pool.submit(self.__start_crawle(client, self._config.Url))
             await self.__pool.drain()
