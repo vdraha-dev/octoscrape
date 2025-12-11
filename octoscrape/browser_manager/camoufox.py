@@ -2,7 +2,7 @@ from __future__ import annotations
 from camoufox.async_api import AsyncCamoufox, Browser
 from browserforge.fingerprints import Screen
 from .interface import IBrowserManager
-from ..config import CommonConfig, common_config
+from ..config import common_config
 from contextlib import asynccontextmanager
 
 
@@ -19,13 +19,12 @@ class CamoufoxBrowserManager(IBrowserManager):
     
 
     @asynccontextmanager
-    async def create_browser(self, config: CommonConfig | None = None):
+    async def create_browser(self):
         if self.__initialized:
             raise RuntimeError("The browser already exists")
         
-        config = config if config else common_config
         async with AsyncCamoufox(
-            headless=config.Headless,
+            headless=common_config.Headless,
             os=["windows", "linux", "macos"],
             screen=Screen(
                 max_width=common_config.MaxWindowWidth,
