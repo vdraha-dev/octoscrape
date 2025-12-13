@@ -33,11 +33,11 @@ class CamoufoxBrowserManager(IBrowserManager):
             raise RuntimeError("The browser already exists")
 
         async with AsyncCamoufox(
-            headless=common_config.Headless,
+            headless=common_config.headless,
             os=["windows", "linux", "macos"],
             screen=Screen(
-                max_width=common_config.MaxWindowWidth,
-                max_height=common_config.MaxWindowHeight,
+                max_width=common_config.max_window_width,
+                max_height=common_config.max_window_height,
             ),
         ) as browser:
             self.__browser = browser

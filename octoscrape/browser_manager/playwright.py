@@ -33,10 +33,10 @@ class PlaywrightBrowserManager(IBrowserManager):
 
         async with async_playwright() as p:
             self.__browser = await p.firefox.launch(
-                headless=common_config.Headless,
+                headless=common_config.headless,
                 args=[
-                    f"--width={common_config.MaxWindowWidth}",
-                    f"--height={common_config.MaxWindowHeight}",
+                    f"--width={common_config.max_window_width}",
+                    f"--height={common_config.max_window_height}",
                 ],
             )
             try:
