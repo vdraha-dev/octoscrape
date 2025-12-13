@@ -46,3 +46,9 @@ test = [
 pythonpath = [ "." ]
 testpaths = [ "tests" ]
 addopts = "-ra --disable-warnings"
+
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
