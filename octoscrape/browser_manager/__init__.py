@@ -1,5 +1,5 @@
-from .interface import  IBrowserManager
 from .camoufox import CamoufoxBrowserManager
+from .interface import IBrowserManager
 from .playwright import PlaywrightBrowserManager
 
 camoufox_manager = CamoufoxBrowserManager()
