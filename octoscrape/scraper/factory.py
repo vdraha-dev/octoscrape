@@ -1,14 +1,28 @@
-from typing import Type
-from .interfaces import IScraper
+from typing import Iterable
+
+from ..config import ScraperConfig
+from .interfaces import IAsyncScraper
 
 
 class ScraperFactory:
-    def __init__(self, scrapers: dict[str, Type[IScraper]]):
-        self.__scrapers = scrapers
+    """
+    Factory for IAsyncScraper implementations.
 
+    Args:
+        scrapers: Iterable of scraper classes.
 
-    def __call__(self, label, *args, **kwargs) -> IScraper:
-        cls = self.__scrapers.get(label, None)
+    Example:
+        ScraperFactory([Scraper1, Scraper2, Scraper3])
+
+    Raises:
+        KeyError: if scraper not found
+    """
+
+    def __init__(self, scrapers: Iterable[type[IAsyncScraper]]):
+        self.__scrapers = {s.__name__: s for s in scrapers}
+
+    def __call__(self, config: ScraperConfig, *args, **kwargs) -> IAsyncScraper:
+        cls = self.__scrapers.get(config.Scraper, None)
         if cls is None:
-            raise KeyError(f"Scraper '{label}' not found") 
-        return cls(*args, **kwargs)
+            raise KeyError(f"Scraper '{config.Scraper}' not found")
+        return cls(config, *args, **kwargs)
