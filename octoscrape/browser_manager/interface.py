@@ -1,30 +1,38 @@
 from abc import ABC, abstractmethod
-from playwright.async_api import Browser
 from contextlib import asynccontextmanager
+
+from playwright.async_api import Browser
 
 
 class IBrowserManager(ABC):
-    '''Interface for singeltone browser'''
+    """
+    Interface for singleton browser lifecycle management.
+
+    Defines the contract for creating, accessing, and destroying
+    a single browser instance in an asynchronous environment.
+    """
 
     @property
     @abstractmethod
     def browser(self) -> Browser:
-        '''
-        Returns the browser if there is one, 
-        otherwise throws an error
-        '''
+        """
+        Return existing browser instance.
 
-    
+        Raises:
+            RuntimeError: If the browser has not been created yet.
+        """
+
     @property
     @abstractmethod
     def initialized(self) -> bool:
-        '''
-        Returns true if the browser is created 
-        otherwise return false
-        '''
-
+        """Indicates whether the browser has been initialized."""
 
     @abstractmethod
     @asynccontextmanager
     async def create_browser(self):
-        '''Creates a single browser for the manager'''
+        """
+        Creates a browser instance.
+
+        Raises:
+            RuntimeError: if browser almost exists
+        """
