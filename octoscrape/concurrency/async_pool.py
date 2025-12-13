@@ -1,10 +1,23 @@
 from __future__ import annotations
+
 import asyncio
-import logging as logger
+import logging
 from typing import Coroutine
+
+logger = logging.getLogger(__name__)
 
 
 class AsyncPool:
+    """
+    Coroutine manager that limits concurrency.
+
+    Args:
+        concurrency (int): Maximum number of coroutines that can run concurrently.
+    Example:
+        pool = AsyncPool(concurrency=5)
+        with AsyncPool(concurrency=5) as pool: ...
+    """
+
     def __init__(self, concurrency: int):
         self.__concurency = concurrency
         self._sem = asyncio.Semaphore(self.__concurency)
@@ -15,32 +28,34 @@ class AsyncPool:
 
         self._stopped = True
 
+        logger.debug(f"AsyncPool({self.__concurency}) created")
+
     @property
     def is_stopped(self):
         return self._stopped
 
-
     async def __aenter__(self) -> AsyncPool:
         await self.start()
         return self
-
 
     async def __aexit__(self, exc_type, exc, tb):
         await self.drain()
         await self.stop()
         return False
 
-
     async def start(self):
         """Launch workers (based on concurrency)."""
+
         self._stopped = False
-        for _ in range(self.__concurency):  # concurrency == initial semaphore value
+        for _ in range(self.__concurency):
             worker = asyncio.create_task(self._worker())
             self._workers.append(worker)
 
+        logger.debug(f"AsyncPool({self.__concurency}) started")
 
     async def stop(self):
         """Stop gracefully: no new tasks, cancel active ones."""
+
         self._stopped = True
 
         await self.cancel_all()
@@ -53,23 +68,27 @@ class AsyncPool:
         await asyncio.gather(*self._workers, return_exceptions=True)
         self._workers.clear()
 
+        logger.debug(f"AsyncPool({self.__concurency}) stopped")
 
-    async def submit(self, coro:Coroutine):
-        """Submit a coroutine to execution. If stopped — ignore or raise."""
+    async def submit(self, coro: Coroutine):
+        """
+        Submit a coroutine to execution.
+
+        Raises:
+            RuntimeError: if pool stopped
+        """
+
         if self._stopped:
             raise RuntimeError("Pool stopped: cannot submit new jobs.")
         await self._queue.put(coro)
 
-
     async def _worker(self):
         """Worker continuously pulls jobs from the queue."""
+
         try:
             while not self._stopped:
                 try:
-                    coro = await asyncio.wait_for(
-                        self._queue.get(), 
-                        timeout=0.1
-                    )
+                    coro = await asyncio.wait_for(self._queue.get(), timeout=0.1)
                 except asyncio.TimeoutError:
                     continue
 
@@ -91,14 +110,14 @@ class AsyncPool:
         except asyncio.CancelledError:
             pass
 
-
     async def drain(self):
         """Wait until all queued tasks finish."""
-        await self._queue.join()
 
+        await self._queue.join()
 
     async def cancel_all(self):
         """Cancel all actively running tasks AND clear queue."""
+
         # cancel active
         for task in list(self._active_tasks):
             task.cancel()
