@@ -80,17 +80,19 @@ def factory(factory_list):
 
 @pytest.fixture(scope="function")
 def exist_config_1():
-    return ScraperConfig({"scraper":"AsyncScraper"})
+    return ScraperConfig({"scraper": "AsyncScraper"})
+
 
 @pytest.fixture(scope="function")
 def exist_config_2():
-    return ScraperConfig({"scraper":"Scraper2"})
+    return ScraperConfig({"scraper": "Scraper2"})
+
 
 @pytest.fixture(scope="function")
 def exist_config_3():
-    return ScraperConfig({"scraper":"Scraper3"})
+    return ScraperConfig({"scraper": "Scraper3"})
 
 
 @pytest.fixture(scope="function")
 def not_exist_config():
-    return ScraperConfig({"scraper":"is_not_exist"})
+    return ScraperConfig({"scraper": "is_not_exist"})

@@ -59,4 +59,3 @@ async def test_async_start(async_scraper):
 @pytest.mark.asyncio
 async def test_async_stop(async_scraper):
     await async_scraper.async_stop()
-

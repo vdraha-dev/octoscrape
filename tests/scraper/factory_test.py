@@ -12,7 +12,9 @@ def test_create_new_scraper(factory, exist_config_1, exist_config_2, exist_confi
     factory(exist_config_3)
 
 
-def test_is_not_the_same(factory, exist_config_1, exist_config_2, exist_config_3, factory_list):
+def test_is_not_the_same(
+    factory, exist_config_1, exist_config_2, exist_config_3, factory_list
+):
     scr1 = factory(exist_config_1)
     scr2 = factory(exist_config_2)
     scr3 = factory(exist_config_3)
