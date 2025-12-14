@@ -72,7 +72,7 @@ class MultiRunner:
             self.__running_loop.create_task(init())
             self.__running_loop.run_forever()
 
-        self.__pool = AsyncPool(common_config.PoolSize)
+        self.__pool = AsyncPool(common_config.pool_size)
         self.__loop_thread = threading.Thread(target=run_loop, daemon=False)
         self.__loop_thread.start()
 

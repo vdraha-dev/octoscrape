@@ -22,7 +22,7 @@ class ScraperFactory:
         self.__scrapers = {s.__name__: s for s in scrapers}
 
     def __call__(self, config: ScraperConfig, *args, **kwargs) -> IAsyncScraper:
-        cls = self.__scrapers.get(config.Scraper, None)
+        cls = self.__scrapers.get(config.scraper, None)
         if cls is None:
-            raise KeyError(f"Scraper '{config.Scraper}' not found")
+            raise KeyError(f"Scraper '{config.scraper}' not found")
         return cls(config, *args, **kwargs)

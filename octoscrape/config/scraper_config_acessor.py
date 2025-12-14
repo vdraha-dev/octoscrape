@@ -1,6 +1,6 @@
 import json
 
-__attribute_error = (
+_attribute_error = (
     "Attribute '{attribute}' is not available: "
     "key '{attribute_key}' is missing in the configuration."
 )
@@ -30,7 +30,7 @@ class ScraperConfig:
             return self.__config["scraper"]
         except KeyError:
             raise AttributeError(
-                __attribute_error.format(attribute="scraper", attribute_key="scraper")
+                _attribute_error.format(attribute="scraper", attribute_key="scraper")
             )
 
     @property
@@ -50,7 +50,7 @@ class ScraperConfig:
             return self.__config["name"]
         except KeyError:
             raise AttributeError(
-                __attribute_error.format(attribute="name", attribute_key="name")
+                _attribute_error.format(attribute="name", attribute_key="name")
             )
 
     @property
@@ -65,7 +65,7 @@ class ScraperConfig:
             return self.__config["url"]
         except KeyError:
             raise AttributeError(
-                __attribute_error.format(attribute="url", attribute_key="url")
+                _attribute_error.format(attribute="url", attribute_key="url")
             )
 
     @property
@@ -114,6 +114,6 @@ class ScraperConfig:
         props = (
             name
             for name, attr in self.__class__.__dict__.items()
-            if isinstance(attr, property) and not name == "Key"
+            if isinstance(attr, property) and not name == "key"
         )
         return all(getattr(self, name) == getattr(other, name) for name in props)
