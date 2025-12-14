@@ -3,12 +3,10 @@ import pytest
 
 @pytest.mark.asyncio
 async def test_creation_of_two_browsers(browser_manager):
-    with pytest.raises(
-        RuntimeError,
-        match="The browser already exists"
-    ):
+    with pytest.raises(RuntimeError, match="The browser already exists"):
         async with browser_manager.create_browser():
-            async with browser_manager.create_browser():...
+            async with browser_manager.create_browser():
+                ...
 
 
 @pytest.mark.asyncio
@@ -23,10 +21,7 @@ async def test_unique_browser(browser_manager):
 
 @pytest.mark.asyncio
 async def test_uninitialized_browser(browser_manager):
-    with pytest.raises(
-        RuntimeError,
-        match="browser has not been created yet"
-    ):
+    with pytest.raises(RuntimeError, match="browser has not been created yet"):
         browser_manager.browser
 
 
@@ -41,6 +36,9 @@ async def test_browser_manager_context_lifecycle(browser_manager):
     assert (None, False) == (get_browser(browser_manager), browser_manager.initialized)
 
     async with browser_manager.create_browser():
-        assert (browser_manager.browser, True) == (get_browser(browser_manager), browser_manager.initialized)
-    
-    assert (None, False) == (get_browser(browser_manager), browser_manager.initialized)    
+        assert (browser_manager.browser, True) == (
+            get_browser(browser_manager),
+            browser_manager.initialized,
+        )
+
+    assert (None, False) == (get_browser(browser_manager), browser_manager.initialized)
