@@ -1,8 +1,10 @@
-import pytest
 import asyncio
+
+import pytest
+
 from octoscrape.config import ScraperConfig
-from octoscrape.scraper.interfaces import IAsyncScraper
 from octoscrape.scraper.factory import ScraperFactory
+from octoscrape.scraper.interfaces import IAsyncScraper
 from octoscrape.scraper.mixins import MixinContextCreator
 
 ############################

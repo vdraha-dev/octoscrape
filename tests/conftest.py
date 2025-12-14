@@ -1,8 +1,9 @@
-import pytest
 import copy
-from octoscrape.config import CommonConfig, ScraperConfig
-from octoscrape.browser_manager import playwright_manager, camoufox_manager
 
+import pytest
+
+from octoscrape.browser_manager import camoufox_manager, playwright_manager
+from octoscrape.config import CommonConfig, ScraperConfig
 
 ###################################
 # Fixtures for CommonConfig tests #

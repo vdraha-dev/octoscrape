@@ -1,4 +1,5 @@
 import pytest
+
 from octoscrape.config import common_config
 
 ############################
