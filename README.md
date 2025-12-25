@@ -1,3 +1,15 @@
+# Octoscrape
+
+A tool for scraping multiple websites or a single website with multiple starting points.
+
+It includes:
+- Multi runner for launching multiple asynchronous scrapers.
+- Implementation of an asynchronous pool for managing auxiliary coroutines.
+- Implementation of accessors to pass settings from config.yaml to a Python script.
+- Browser manager for sharing a single browser instance between scrapers.
+- Simple CLI implementation for managing scrapers at runtime.
+- Additional Mixins.
+
 # Settings
 
 ## Configuration Format
