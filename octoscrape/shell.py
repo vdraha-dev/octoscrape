@@ -1,6 +1,10 @@
 import cmd
-from .scraper import MultiRunner
 import logging
+from typing import Iterable
+
+from .scraper import MultiRunner, IAsyncScraper
+from .config import scrappers_configs
+
 
 logger = logging.getLogger(__name__)
 
@@ -8,9 +12,10 @@ logger = logging.getLogger(__name__)
 class Shell(cmd.Cmd):
     prompt = "> "
 
-    def __init__(self):
+    def __init__(self, scrapers: Iterable[IAsyncScraper]):
         super().__init__()
-        self.runner : MultiRunner | None = None
+        self.runner : MultiRunner = MultiRunner()
+        self.runner.register(scrapers)
 
     def do_start(self, arg):
         """
@@ -29,9 +34,8 @@ class Shell(cmd.Cmd):
 
         """
 
-        self._create_scraper_if_no_exist()
-        self.runner.start(self._process_arg_for_multirunner(arg))
-        
+        self._start_scraper_if_no()
+        self.runner.run_scrapers(self._process_arg_for_multirunner(arg))
 
     def do_stop(self, arg):
         """
@@ -50,7 +54,11 @@ class Shell(cmd.Cmd):
 
         """
     
-        self.runner.stop(self._process_arg_for_multirunner(arg))
+        processed_arg = self._process_arg_for_multirunner(arg)
+        if processed_arg is None:
+            self._stop_all()
+            return
+        self.runner.stop_scrapers(processed_arg)
 
     def do_exit(self, arg):
         """Closes the shell and all scrapers"""
@@ -63,10 +71,7 @@ class Shell(cmd.Cmd):
             self.runner.stop()
 
     
-    def _create_scraper_if_no_exist(self):
-        if not self.runner:
-            self.runner = MultiRunner()
-
+    def _start_scraper_if_no(self):
         if not self.runner.is_started:
             self.runner.start()
 
