@@ -11,7 +11,8 @@ scrapers:
     human_name: Some website
     name: some_website
     url: https://some_website.com
-    # label: some_website_emplemantation_label
+    scraper: DummiesScraper
+    # scraper: some_website_emplemantation_label
     # pool_size: 10
     # proxy:
     #   server: "http://proxy:8080"

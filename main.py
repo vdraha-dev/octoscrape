@@ -1,4 +1,6 @@
-import asyncio
-from octoscrape.browser_manager import camoufox_manager
-from octoscrape.config import common_config
+from octoscrape.shell import Shell
+from dummies.scrapers import DummiesScraper
 
+
+if __name__ == "__main__":
+    Shell([DummiesScraper]).cmdloop()
